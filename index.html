@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prather/Arras Universal Battle Plan '26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#F7F4EF; --card:#FFFFFF; --ink:#111111; --ink-soft:#444444;
+    --border:#D8D0C0; --gold:#D4960A; --gold-text:#7A5200;
+    --world-bg:#ECECEC; --world-text:#333333;
+    --express-bg:#FFF0B0; --express-fg:#6B4400; --express-bd:#D4960A;
+    --express-used-bg:#DDDDDD; --express-used-fg:#888888; --express-used-bd:#AAAAAA;
+    --standby-bg:#DCF0DC; --standby-fg:#1A4A1A; --standby-bd:#3A8A3A;
+    --single-bg:#D8EEFF; --single-fg:#0A3060; --single-bd:#2060B0;
+    --logis-bg:#EEEEEE; --logis-fg:#333333; --logis-bd:#999999;
+    --optional-bg:#FFF0D8; --optional-fg:#7A3800; --optional-bd:#D4820A;
+    --done-bg:#E8E8E8; --done-text:#888888; --done-check:#3A8A3A;
+    --section-bar:#222222; --lock-color:#888888;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);font-family:'Barlow',sans-serif;font-size:16px;line-height:1.45;min-height:100vh}
+
+  /* HEADER */
+  header{background:#111;padding:14px 16px 10px;text-align:center;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
+  header h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(16px,4.5vw,22px);font-weight:900;color:#fff;letter-spacing:.03em;text-transform:uppercase;line-height:1.15}
+  header .sub{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+  .lock-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:2px solid #555;border-radius:6px;color:#AAA;padding:5px 8px;font-size:18px;cursor:pointer;line-height:1}
+  .lock-btn.unlocked{border-color:var(--gold);color:var(--gold)}
+
+  /* PIN MODAL */
+  .pin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:999;align-items:center;justify-content:center}
+  .pin-overlay.show{display:flex}
+  .pin-box{background:#fff;border-radius:12px;padding:24px 20px;width:280px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+  .pin-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#111;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+  .pin-sub{font-size:13px;color:#666;margin-bottom:16px}
+  .pin-display{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;letter-spacing:.2em;color:#111;height:44px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #BBB;background:#fff;transition:background .1s,border-color .1s}
+  .pin-dot.filled{background:#111;border-color:#111}
+  .pin-error{color:#CC2200;font-size:13px;height:18px;margin-bottom:8px}
+  .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+  .num-btn{padding:14px 0;border:2px solid #DDD;border-radius:8px;background:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:#111;cursor:pointer;transition:background .1s}
+  .num-btn:active{background:#F0F0F0}
+  .num-btn.del{font-size:16px;color:#666}
+  .num-btn.zero{grid-column:2}
+  .pin-cancel{width:100%;padding:10px;border:none;background:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#888;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-top:4px}
+
+  /* TABS */
+  .tabs{display:flex;background:#1A1A1A;border-bottom:2px solid var(--gold);position:sticky;top:71px;z-index:99}
+  .tab-btn{flex:1;padding:10px 6px;border:none;background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#888;cursor:pointer;border-bottom:3px solid transparent}
+  .tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+
+  /* PANELS */
+  .day-panel{display:none;padding-bottom:60px}.day-panel.active{display:block}
+
+  /* SECTION BAR */
+  .section-bar{background:var(--section-bar);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:119px;z-index:90;border-bottom:1px solid #444}
+  .section-bar h2{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#AAA;letter-spacing:.1em;text-transform:uppercase}
+  .progress-badge{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:21px;color:#fff;line-height:1}
+  .progress-badge span{font-size:12px;font-weight:500;color:#888}
+
+  /* EXPRESS BAR */
+  .express-bar{background:var(--gold);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #B07C00}
+  .express-bar .elabel{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#3A2000;letter-spacing:.08em;text-transform:uppercase}
+  .express-bar .etaps{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:900;color:#3A2000;line-height:1}
+  .express-bar .etaps span{font-size:12px;font-weight:500;opacity:.7}
+
+  /* DOTS */
+  .express-dots{display:flex;gap:5px;padding:9px 16px;background:#FFF8E0;border-bottom:1px solid #E8D890;flex-wrap:wrap;align-items:center}
+  .express-dots .dot-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#7A5200;letter-spacing:.08em;text-transform:uppercase;margin-right:4px}
+  .exp-dot{width:22px;height:22px;border-radius:50%;background:var(--gold);border:2px solid #B07C00;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#3A2000}
+  .exp-dot.used{background:#CCC;border-color:#AAA;color:#888;text-decoration:line-through}
+
+  /* WORLD LABEL */
+  .world-label{background:var(--world-bg);padding:6px 16px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--world-text);border-bottom:1px solid var(--border);border-top:2px solid var(--border);margin-top:2px}
+
+  /* RIDE CARD */
+  .ride-card{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--border);user-select:none}
+  .ride-card:active{background:#F0EDE8}
+  .ride-card.done{background:var(--done-bg)}
+  .ride-card.optional-card{background:#FFFBF0}
+
+  /* Step number + FP badge */
+  .step-col{display:flex;flex-direction:column;align-items:center;min-width:26px;flex-shrink:0}
+  .ride-step{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;color:var(--gold-text);line-height:1;text-align:center}
+  .ride-card.done .ride-step{color:var(--done-text)}
+  .fp-badge{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:900;letter-spacing:.04em;color:var(--gold);background:#3A2000;border-radius:2px;padding:1px 3px;margin-top:2px;line-height:1.2;white-space:nowrap}
+  .ride-card.done .fp-badge{background:#CCC;color:#888}
+
+  /* Ride info */
+  .ride-info{flex:1;min-width:0;cursor:pointer}
+  .ride-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--ink);line-height:1.2;letter-spacing:.01em}
+  .ride-card.done .ride-name{color:var(--done-text);text-decoration:line-through;text-decoration-color:#AAA}
+  .ride-note{font-family:'Barlow',sans-serif;font-size:12px;color:var(--ink-soft);line-height:1.35;margin-top:2px}
+  .ride-card.done .ride-note{color:#AAA}
+
+  /* Chips */
+  .chip{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;padding:3px 8px;border-radius:4px;margin-top:5px;border:2px solid;cursor:default}
+  .chip-EXPRESS{background:var(--express-bg);color:var(--express-fg);border-color:var(--express-bd)}
+  .chip-EXPRESS.tappable{cursor:pointer}
+  .chip-EXPRESS.tappable:active{opacity:.7}
+  .chip-EXPRESS.tap-used{background:var(--express-used-bg);color:var(--express-used-fg);border-color:var(--express-used-bd);text-decoration:line-through;cursor:pointer}
+  .chip-STANDBY{background:var(--standby-bg);color:var(--standby-fg);border-color:var(--standby-bd)}
+  .chip-SINGLE{background:var(--single-bg);color:var(--single-fg);border-color:var(--single-bd)}
+  .chip-LOGIS{background:var(--logis-bg);color:var(--logis-fg);border-color:var(--logis-bd)}
+  .chip-OPTIONAL{background:var(--optional-bg);color:var(--optional-fg);border-color:var(--optional-bd)}
+  .ride-card.done .chip-STANDBY,.ride-card.done .chip-SINGLE,.ride-card.done .chip-LOGIS,.ride-card.done .chip-OPTIONAL{background:#DDD;color:#999;border-color:#CCC}
+
+  .tap-hint{display:block;font-family:'Barlow',sans-serif;font-size:11px;color:var(--gold-text);margin-top:3px;font-style:italic}
+  .ride-card.done .tap-hint{display:none}
+
+  /* Checkbox */
+  .cbox{width:28px;height:28px;border:2px solid #BBB;border-radius:5px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:transparent;font-weight:900;cursor:pointer}
+  .ride-card.done .cbox{background:var(--done-check);border-color:var(--done-check);color:#fff}
+  body.locked .cbox{cursor:default;opacity:.5}
+  body.locked .chip-EXPRESS.tappable{cursor:default}
+  body.locked .ride-info{cursor:default}
+
+  /* CALLOUT */
+  .callout{padding:12px 16px;border-left:4px solid var(--gold);background:#FFF8E6;border-bottom:1px solid var(--border)}
+  .callout p{font-family:'Barlow',sans-serif;font-size:13px;color:var(--ink);line-height:1.45}
+  .callout strong{color:var(--gold-text);font-weight:600}
+  .callout-green{border-left-color:#3A8A3A;background:#F0FAF0}
+  .callout-blue{border-left-color:#2060B0;background:#F0F6FF}
+  .callout-red{border-left-color:#CC2200;background:#FFF0EE}
+
+  /* DIVIDER */
+  .divider{background:#111;padding:9px 16px;margin-top:8px;border-top:2px solid var(--gold)}
+  .divider h3{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+
+  /* CHECKLIST SECTION */
+  .checklist-grid{display:flex;flex-direction:column;gap:0}
+  .cl-item{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+  .cl-item:active{background:#F0EDE8}
+  .cl-item.done{background:var(--done-bg)}
+  .cl-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--ink);flex:1}
+  .cl-item.done .cl-name{color:var(--done-text);text-decoration:line-through;text-decoration-color:#AAA}
+  .cl-fp{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:var(--gold);background:#3A2000;border-radius:2px;padding:1px 4px;white-space:nowrap}
+  .cl-item.done .cl-fp{background:#CCC;color:#888}
+  .cl-check{width:24px;height:24px;border:2px solid #BBB;border-radius:4px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;font-weight:900}
+  .cl-item.done .cl-check{background:var(--done-check);border-color:var(--done-check);color:#fff}
+  body.locked .cl-item{cursor:default}
+  body.locked .cl-check{opacity:.5;cursor:default}
+
+  /* FOOD */
+  .food-card{padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card)}
+  .food-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--ink)}
+  .food-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.35}
+  .food-tag{display:inline-block;margin-top:3px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:3px;background:#EEE;color:#444;border:1px solid #CCC}
+
+  /* TIPS */
+  .tip-item{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--card);align-items:flex-start}
+  .tip-bullet{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:var(--gold-text);flex-shrink:0;line-height:1.45}
+  .tip-text{font-size:13px;color:var(--ink);line-height:1.45}
+  .tip-text strong{font-weight:600}
+
+  /* LINKS */
+  .links-wrap{padding:14px;display:flex;flex-direction:column;gap:9px;background:var(--bg)}
+  .link-btn{display:block;padding:12px 16px;background:#111;color:#fff;text-decoration:none;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;text-align:center;border:1px solid #444}
+  .link-btn:active{background:#333}
+  .reset-note{text-align:center;padding:12px;font-size:11px;color:#AAA;font-style:italic}
+</style>
+</head>
+<body class="locked">
+
+<!-- PIN MODAL -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-box">
+    <div class="pin-title">Enter PIN</div>
+    <div class="pin-sub">Site is view-only without PIN</div>
+    <div class="pin-display">
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+      <div class="pin-dot" id="pd4"></div>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+    <div class="numpad">
+      <button class="num-btn" onclick="pinKey('1')">1</button>
+      <button class="num-btn" onclick="pinKey('2')">2</button>
+      <button class="num-btn" onclick="pinKey('3')">3</button>
+      <button class="num-btn" onclick="pinKey('4')">4</button>
+      <button class="num-btn" onclick="pinKey('5')">5</button>
+      <button class="num-btn" onclick="pinKey('6')">6</button>
+      <button class="num-btn" onclick="pinKey('7')">7</button>
+      <button class="num-btn" onclick="pinKey('8')">8</button>
+      <button class="num-btn" onclick="pinKey('9')">9</button>
+      <button class="num-btn zero" onclick="pinKey('0')">0</button>
+      <button class="num-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <button class="pin-cancel" onclick="closePin()">Cancel</button>
+  </div>
+</div>
+
+<header>
+  <h1>Prather / Arras — Universal Battle Plan</h1>
+  <div class="sub">Orlando · June 5 &amp; 6, 2026</div>
+  <button class="lock-btn" id="lockBtn" onclick="handleLock()">🔒</button>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchDay('friday')">⚡ FRI — Epic Universe</button>
+  <button class="tab-btn" onclick="switchDay('saturday')">🗺 SAT — Studios + Islands</button>
+</div>
+
+<!-- ══════════════ FRIDAY ══════════════ -->
+<div class="day-panel active" id="panel-friday">
+  <div class="section-bar">
+    <h2>Epic Universe · Express Pass</h2>
+    <div class="progress-badge" id="progress-friday">0 <span>/ 11</span></div>
+  </div>
+  <div class="express-bar">
+    <div class="elabel">⚡ Express Taps Remaining</div>
+    <div class="etaps" id="express-taps">10 <span>of 10</span></div>
+  </div>
+  <div class="express-dots">
+    <span class="dot-label">Taps:</span>
+    <span class="exp-dot" id="dot-1">1</span><span class="exp-dot" id="dot-2">2</span>
+    <span class="exp-dot" id="dot-3">3</span><span class="exp-dot" id="dot-4">4</span>
+    <span class="exp-dot" id="dot-5">5</span><span class="exp-dot" id="dot-6">6</span>
+    <span class="exp-dot" id="dot-7">7</span><span class="exp-dot" id="dot-8">8</span>
+    <span class="exp-dot" id="dot-9">9</span><span class="exp-dot" id="dot-10">10</span>
+  </div>
+  <div class="callout">
+    <p><strong>The play:</strong> Everyone rushes to Nintendo World and Ministry at open. We go the opposite — Dark Universe and Isle of Berk first. Empty for 90 minutes. <strong>Bank Express taps on short-wait morning rides. Spend them in the afternoon when those same lines are 60–90 min.</strong></p>
+  </div>
+
+  <div class="world-label">🌌 Arrive · Celestial Park</div>
+  <div class="ride-card" id="fri-0">
+    <div class="step-col"><div class="ride-step">1</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-0')">
+      <div class="ride-name">Turnstiles — Arrive 8:15 AM</div>
+      <div class="ride-note">45 min before the 9:00 open. Beat the parking crush. Meet point: Celestial Park fountain once inside.</div>
+      <span class="chip chip-LOGIS">LOGISTICS</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-0')">✓</div>
+  </div>
+
+  <div class="world-label">🧟 Dark Universe — First Stop</div>
+  <div class="ride-card" id="fri-1">
+    <div class="step-col"><div class="ride-step">2</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-1')">
+      <div class="ride-name">Monsters Unchained: The Frankenstein Experiment</div>
+      <div class="ride-note">Best dark ride in the park. Walk-on early — standby now, cash the Express tap on a re-ride this afternoon when it's 60+ min.</div>
+      <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-1')">✓</div>
+  </div>
+  <div class="ride-card" id="fri-2">
+    <div class="step-col"><div class="ride-step">3</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-2')">
+      <div class="ride-name">Curse of the Werewolf</div>
+      <div class="ride-note">Right there in Dark Universe. Walk-on early. Bank the Express tap — use it this afternoon.</div>
+      <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-2')">✓</div>
+  </div>
+
+  <div class="world-label">🐉 Isle of Berk</div>
+  <div class="ride-card" id="fri-3">
+    <div class="step-col"><div class="ride-step">4</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-3')">
+      <div class="ride-name">Hiccup's Wing Gliders</div>
+      <div class="ride-note">Family coaster. Low wait early. Standby now — Express tap saved for afternoon re-ride.</div>
+      <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-3')">✓</div>
+  </div>
+  <div class="ride-card" id="fri-4">
+    <div class="step-col"><div class="ride-step">5</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-4')">
+      <div class="ride-name">Fyre Drill</div>
+      <div class="ride-note">Low wait at open. Waits spike hard in Florida afternoon heat — that's when we use the Express tap.</div>
+      <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-4')">✓</div>
+  </div>
+  <div class="ride-card" id="fri-5">
+    <div class="step-col"><div class="ride-step">6</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-5')">
+      <div class="ride-name">Dragon Racer's Rally</div>
+      <div class="ride-note">The ONLY ride NOT on Express. Knock it out here — standby only all day.</div>
+      <span class="chip chip-STANDBY">STANDBY ONLY — NO EXPRESS</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-5')">✓</div>
+  </div>
+
+  <div class="world-label">🌠 Celestial Park</div>
+  <div class="ride-card" id="fri-6">
+    <div class="step-col"><div class="ride-step">7</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-6')">
+      <div class="ride-name">Stardust Racers</div>
+      <div class="ride-note">Top thrill coaster. Standby now while it's short. Express tap saved for afternoon re-ride at 60+ min.</div>
+      <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-6')">✓</div>
+  </div>
+
+  <div class="world-label">🍄 Super Nintendo World — Late Morning</div>
+  <div class="ride-card" id="fri-7">
+    <div class="step-col"><div class="ride-step">8</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-7')">
+      <div class="ride-name">Mario Kart: Bowser's Challenge</div>
+      <div class="ride-note">One of the worst lines in the park all day. Spend the Express tap here.</div>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-7" onclick="burnTap('fri-7',event)">⚡ EXPRESS — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap the chip when you scan your pass</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-7')">✓</div>
+  </div>
+  <div class="ride-card" id="fri-8">
+    <div class="step-col"><div class="ride-step">9</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-8')">
+      <div class="ride-name">Mine-Cart Madness</div>
+      <div class="ride-note">Can sit at 2+ hours all day. Use Express right after Mario Kart while in Nintendo World.</div>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-8" onclick="burnTap('fri-8',event)">⚡ EXPRESS — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap the chip when you scan your pass</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-8')">✓</div>
+  </div>
+  <div class="ride-card" id="fri-9">
+    <div class="step-col"><div class="ride-step">10</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-9')">
+      <div class="ride-name">Yoshi's Adventure</div>
+      <div class="ride-note">Gentle ride, usually a shorter line. Standby while in Nintendo World — save Express tap for something harder.</div>
+      <span class="chip chip-STANDBY">STANDBY</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-9')">✓</div>
+  </div>
+
+  <div class="world-label">⚡ Ministry of Magic — Save for Last</div>
+  <div class="ride-card" id="fri-10">
+    <div class="step-col"><div class="ride-step">11</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-10')">
+      <div class="ride-name">Harry Potter and the Battle at the Ministry</div>
+      <div class="ride-note">Best ride in the park. Wait drops up to 74% in the final hour. End the day on it with Express — near walk-on to the best ride of the trip.</div>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-10" onclick="burnTap('fri-10',event)">⚡ EXPRESS — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap the chip when you scan your pass</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-10')">✓</div>
+  </div>
+
+  <!-- WILDCARD -->
+  <div class="ride-card" id="fri-wild">
+    <div class="step-col"><div class="ride-step">+</div><div class="fp-badge">⚡ FP</div></div>
+    <div class="ride-info" onclick="toggleRide('fri-wild')">
+      <div class="ride-name">Wildcard Express Tap</div>
+      <div class="ride-note">Use if you burn a tap off-plan — re-ride, an afternoon Express run, or anything not listed. Keeps the counter honest.</div>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-wild" onclick="burnTap('fri-wild',event)">⚡ EXPRESS — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap the chip when you scan your pass</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('fri-wild')">✓</div>
+  </div>
+
+  <div class="callout callout-green">
+    <p><strong>Afternoon re-rides (1–4 PM):</strong> Cash the banked Express taps on Monsters Unchained, Stardust Racers, Hiccup's, Curse of the Werewolf, and Fyre Drill. Those lines are now 45–90 min standby — we walk straight to the front. Also catch Le Cirque Arcanus or Untrainable Dragon show to rest out of the heat.</p>
+  </div>
+
+  <div class="callout callout-red">
+    <p><strong>Plan B — if Nintendo World is already slammed:</strong> Skip it at open entirely. Go Dark Universe → Isle of Berk → Stardust Racers first. Hit Nintendo World mid-morning using Express on Mario Kart and Mine-Cart back to back. If Mine-Cart is down, use that Express tap on a Monsters Unchained or Stardust re-ride instead — don't waste it.</p>
+  </div>
+
+  <!-- FOOD FRIDAY -->
+  <div class="divider"><h3>🍽 Quick Food — Friday</h3></div>
+  <div class="food-card">
+    <div class="food-name">Toadstool Café</div>
+    <div class="food-sub">Super Nintendo World. Mobile order in the Universal app while in a ride line — walk up and grab it.</div>
+    <span class="food-tag">MOBILE ORDER</span>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Pizza Moon</div>
+    <div class="food-sub">Celestial Park. Good fallback. Eat before 11:15 or after 1:45 to dodge peak lunch crowds.</div>
+    <span class="food-tag">QUICK SERVICE</span>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Butterbeer — Ministry of Magic Cart</div>
+    <div class="food-sub">Frozen is the move in Florida June heat. Grab one when we're near the Ministry.</div>
+    <span class="food-tag">MUST DO</span>
+  </div>
+
+  <!-- TIPS FRIDAY -->
+  <div class="divider"><h3>📋 Park Tips — Friday</h3></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Express is single-use per ride.</strong> One tap each. Spend on long-wait rides, walk standby on short ones. Never burn a tap on a walk-on.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Bank then spend.</strong> Ride easy stuff at standby in the quiet morning. Cash the Express tap in the afternoon when that same line is 60–90 minutes.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>If a ride goes down</strong> — check the Universal app for status. If Mine-Cart or Battle at the Ministry is down, redirect that Express tap to a re-ride on Stardust Racers or Monsters Unchained. Don't leave taps unused.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>The Universal app is our dashboard.</strong> Download before we leave the hotel. Live wait times, Express status, and mobile food orders all live there.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Split up if needed.</strong> We don't all have to ride together. Two smaller groups can cover more ground — agree on a meet point and check the app.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Constellation Carousel at night.</strong> The park after dark from Celestial Park is the best photo of the trip. Walk-on at close — no Express needed.</div></div>
+
+  <!-- RIDE CHECKLIST FRIDAY -->
+  <div class="divider"><h3>✅ Full Ride Checklist — Friday</h3></div>
+  <div class="checklist-grid">
+    <div class="cl-item" id="cl-fri-1" onclick="toggleCL('cl-fri-1')"><span class="cl-fp">⚡FP</span><span class="cl-name">Monsters Unchained</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-2" onclick="toggleCL('cl-fri-2')"><span class="cl-fp">⚡FP</span><span class="cl-name">Curse of the Werewolf</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-3" onclick="toggleCL('cl-fri-3')"><span class="cl-fp">⚡FP</span><span class="cl-name">Hiccup's Wing Gliders</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-4" onclick="toggleCL('cl-fri-4')"><span class="cl-fp">⚡FP</span><span class="cl-name">Fyre Drill</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-5" onclick="toggleCL('cl-fri-5')"><span class="cl-name">Dragon Racer's Rally</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-6" onclick="toggleCL('cl-fri-6')"><span class="cl-fp">⚡FP</span><span class="cl-name">Stardust Racers</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-7" onclick="toggleCL('cl-fri-7')"><span class="cl-fp">⚡FP</span><span class="cl-name">Mario Kart: Bowser's Challenge</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-8" onclick="toggleCL('cl-fri-8')"><span class="cl-fp">⚡FP</span><span class="cl-name">Mine-Cart Madness</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-9" onclick="toggleCL('cl-fri-9')"><span class="cl-fp">⚡FP</span><span class="cl-name">Yoshi's Adventure</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-10" onclick="toggleCL('cl-fri-10')"><span class="cl-fp">⚡FP</span><span class="cl-name">Battle at the Ministry</span><div class="cl-check">✓</div></div>
+  </div>
+
+  <!-- LINKS FRIDAY -->
+  <div class="divider"><h3>🔗 Useful Links</h3></div>
+  <div class="links-wrap">
+    <a class="link-btn" href="https://apps.apple.com/us/app/universal-orlando-resort/id418925195" target="_blank">📱 Universal App — iOS</a>
+    <a class="link-btn" href="https://play.google.com/store/apps/details?id=com.universalorlando.uo" target="_blank">📱 Universal App — Android</a>
+    <a class="link-btn" href="https://www.universalorlando.com/web/en/us/plan-your-visit/park-maps" target="_blank">🗺 Official Park Maps</a>
+  </div>
+  <div class="reset-note">Checklist auto-resets at midnight each day.</div>
+</div>
+
+<!-- ══════════════ SATURDAY ══════════════ -->
+<div class="day-panel" id="panel-saturday">
+  <div class="section-bar">
+    <h2>Studios + Islands · No Express</h2>
+    <div class="progress-badge" id="progress-saturday">0 <span>/ 10</span></div>
+  </div>
+  <div class="callout">
+    <p><strong>No Express today — arrival time is everything.</strong> Be at Islands of Adventure turnstiles 45 min before open and go straight to Hagrid's. The park is a loop — no shortcuts across the lagoon. The direction we turn at open decides the morning.</p>
+  </div>
+
+  <div class="world-label">🏰 Islands of Adventure — Start Here</div>
+  <div class="ride-card" id="sat-0">
+    <div class="step-col"><div class="ride-step">1</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-0')">
+      <div class="ride-name">Turnstiles — Arrive Early</div>
+      <div class="ride-note">45 min before open. Walk straight back through Seuss Landing toward Hogsmeade. Don't stop — go directly to Hagrid's.</div>
+      <span class="chip chip-LOGIS">LOGISTICS</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-0')">✓</div>
+  </div>
+
+  <div class="world-label">🧙 Hogsmeade</div>
+  <div class="ride-card" id="sat-1">
+    <div class="step-col"><div class="ride-step">2</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-1')">
+      <div class="ride-name">Hagrid's Magical Creatures Motorbike Adventure</div>
+      <div class="ride-note">First ride — no exceptions. Hits 90–110+ min by mid-morning. No Express option. Ride now or wait two hours later.</div>
+      <span class="chip chip-STANDBY">STANDBY — ROPE DROP</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-1')">✓</div>
+  </div>
+
+  <div class="world-label">🦕 Jurassic World</div>
+  <div class="ride-card" id="sat-2">
+    <div class="step-col"><div class="ride-step">3</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-2')">
+      <div class="ride-name">Jurassic World VelociCoaster</div>
+      <div class="ride-note">Drops to ~20–25 min right after Hagrid's. Mandatory free lockers + metal detector — empty all pockets before getting in line.</div>
+      <span class="chip chip-STANDBY">STANDBY</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-2')">✓</div>
+  </div>
+
+  <div class="world-label">🦸 Marvel Super Hero Island</div>
+  <div class="ride-card" id="sat-3">
+    <div class="step-col"><div class="ride-step">4</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-3')">
+      <div class="ride-name">The Incredible Hulk Coaster</div>
+      <div class="ride-note">Still under 30 min early. Free lockers + metal detector. Single rider available — fastest way through for a flexible group.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-3')">✓</div>
+  </div>
+  <div class="ride-card" id="sat-4">
+    <div class="step-col"><div class="ride-step">5</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-4')">
+      <div class="ride-name">The Amazing Adventures of Spider-Man</div>
+      <div class="ride-note">Right there in Marvel. Single rider lane available — knock it out while we're in the area.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-4')">✓</div>
+  </div>
+
+  <div class="world-label">🧙 Back to Hogsmeade</div>
+  <div class="ride-card" id="sat-5">
+    <div class="step-col"><div class="ride-step">6</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-5')">
+      <div class="ride-name">Harry Potter and the Forbidden Journey + Butterbeer</div>
+      <div class="ride-note">Builds slower than the coasters — right time to hit it. Frozen Butterbeer after. Single rider inside the castle.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-5')">✓</div>
+  </div>
+
+  <div class="world-label">🚂 Hogwarts Express → Diagon Alley</div>
+  <div class="ride-card" id="sat-6">
+    <div class="step-col"><div class="ride-step">7</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-6')">
+      <div class="ride-name">Hogwarts Express to Universal Studios</div>
+      <div class="ride-note">Requires park-to-park ticket. Different scenes each direction — it's its own attraction. Our hop to Studios.</div>
+      <span class="chip chip-STANDBY">STANDBY</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-6')">✓</div>
+  </div>
+
+  <div class="world-label">🏦 Diagon Alley — Universal Studios</div>
+  <div class="ride-card" id="sat-7">
+    <div class="step-col"><div class="ride-step">8</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-7')">
+      <div class="ride-name">Escape from Gringotts</div>
+      <div class="ride-note">One of the best single rider time-savers at the resort. See the fire-breathing dragon on the roof while we're here.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-7')">✓</div>
+  </div>
+
+  <div class="world-label">🎬 Universal Studios — Afternoon</div>
+  <div class="ride-card" id="sat-8">
+    <div class="step-col"><div class="ride-step">9</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-8')">
+      <div class="ride-name">Revenge of the Mummy</div>
+      <div class="ride-note">Launched indoor coaster in the dark — a legitimate headliner. Single rider available. Hit this before the afternoon heat peak.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-8')">✓</div>
+  </div>
+  <div class="ride-card" id="sat-9">
+    <div class="step-col"><div class="ride-step">10</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-9')">
+      <div class="ride-name">Transformers · MIB: Alien Attack · Minion Mayhem</div>
+      <div class="ride-note">Indoor dark rides during peak midday heat. Single rider on Transformers. Hogwarts Express back to Islands for late-day re-rides.</div>
+      <span class="chip chip-SINGLE">SINGLE RIDER where available</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-9')">✓</div>
+  </div>
+
+  <!-- DUDLEY OPTIONAL -->
+  <div class="world-label">💦 Late Day Optional</div>
+  <div class="ride-card optional-card" id="sat-opt">
+    <div class="step-col"><div class="ride-step">★</div></div>
+    <div class="ride-info" onclick="toggleRide('sat-opt')">
+      <div class="ride-name">Dudley Do-Right's Ripsaw Falls</div>
+      <div class="ride-note">75-foot drop flume — a legit thrill, not a kids ride. Will soak at least one person. Best at the end of the day when we're hot and don't care about wet shoes.</div>
+      <span class="chip chip-OPTIONAL">OPTIONAL — LATE DAY</span>
+    </div>
+    <div class="cbox" onclick="toggleRide('sat-opt')">✓</div>
+  </div>
+
+  <!-- FOOD SATURDAY -->
+  <div class="divider"><h3>🍽 Quick Food — Saturday</h3></div>
+  <div class="food-card">
+    <div class="food-name">Leaky Cauldron</div>
+    <div class="food-sub">Diagon Alley — best quick service in Studios. Mobile order while in a ride line. Fish & chips, British pub fare. Primary lunch stop.</div>
+    <span class="food-tag">MOBILE ORDER · LUNCH</span>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Three Broomsticks</div>
+    <div class="food-sub">Hogsmeade — mobile order from the table. Best option if we eat on the Islands side early in the day.</div>
+    <span class="food-tag">MOBILE ORDER</span>
+  </div>
+  <div class="food-card">
+    <div class="food-name">Springfield / Fast Food Blvd</div>
+    <div class="food-sub">Simpsons area — cafeteria-style. Split across counters and pay together. Krusty Burger, Flaming Moe.</div>
+    <span class="food-tag">QUICK SERVICE</span>
+  </div>
+
+  <!-- TIPS SATURDAY -->
+  <div class="divider"><h3>📋 Park Tips — Saturday</h3></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Arrival is our only edge today.</strong> No Express — being at Islands 45 min before open is the single biggest advantage we have. Don't be late to the parking structure.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Single rider is our free Express.</strong> Skip it on Hagrid's and VelociCoaster if standby is under ~45 min. Use it on everything else.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Hogwarts Express shows different scenes each direction.</strong> King's Cross to Hogsmeade is one story; Hogsmeade back is another. Ride it both ways if we can.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Two rides are closed all of 2026.</strong> Rip Ride Rockit is permanently demolished. Jurassic Park River Adventure is closed until November. Our coasters are VelociCoaster and Hulk — both great.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Dudley Do-Right strategy.</strong> Don't ride it before lunch. Save it for late afternoon when we're hot and don't mind getting soaked. Wear sandals or shoes you're OK with getting wet.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Re-ride window.</strong> Waits fall hard in the final 60–90 min. Hogwarts Express back to Islands late afternoon for re-rides. Hagrid's posted "90 min" at night often runs ~60.</div></div>
+  <div class="tip-item"><div class="tip-bullet">→</div><div class="tip-text"><strong>Mobile order is mandatory.</strong> Open the Universal app while in a ride line, place our food order, pick it up on the way out. Never stand in a walk-up food queue on a Saturday in June.</div></div>
+
+  <!-- RIDE CHECKLIST SATURDAY -->
+  <div class="divider"><h3>✅ Full Ride Checklist — Saturday</h3></div>
+  <div class="checklist-grid">
+    <div class="cl-item" id="cl-sat-1" onclick="toggleCL('cl-sat-1')"><span class="cl-name">Hagrid's Motorbike Adventure</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-2" onclick="toggleCL('cl-sat-2')"><span class="cl-name">Jurassic World VelociCoaster</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-3" onclick="toggleCL('cl-sat-3')"><span class="cl-name">The Incredible Hulk Coaster</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-4" onclick="toggleCL('cl-sat-4')"><span class="cl-name">The Amazing Adventures of Spider-Man</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-5" onclick="toggleCL('cl-sat-5')"><span class="cl-name">Harry Potter and the Forbidden Journey</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-6" onclick="toggleCL('cl-sat-6')"><span class="cl-name">Hogwarts Express</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-7" onclick="toggleCL('cl-sat-7')"><span class="cl-name">Escape from Gringotts</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-8" onclick="toggleCL('cl-sat-8')"><span class="cl-name">Revenge of the Mummy</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-9" onclick="toggleCL('cl-sat-9')"><span class="cl-name">Transformers · MIB · Minion Mayhem</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-sat-opt" onclick="toggleCL('cl-sat-opt')"><span class="cl-name">Dudley Do-Right's Ripsaw Falls ★</span><div class="cl-check">✓</div></div>
+  </div>
+
+  <!-- LINKS SATURDAY -->
+  <div class="divider"><h3>🔗 Useful Links</h3></div>
+  <div class="links-wrap">
+    <a class="link-btn" href="https://apps.apple.com/us/app/universal-orlando-resort/id418925195" target="_blank">📱 Universal App — iOS</a>
+    <a class="link-btn" href="https://play.google.com/store/apps/details?id=com.universalorlando.uo" target="_blank">📱 Universal App — Android</a>
+    <a class="link-btn" href="https://www.universalorlando.com/web/en/us/plan-your-visit/park-maps" target="_blank">🗺 Official Park Maps</a>
+  </div>
+  <div class="reset-note">Checklist auto-resets at midnight each day.</div>
+</div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────────────
+const CORRECT_PIN = '1551';
+const FRI_IDS  = ['fri-0','fri-1','fri-2','fri-3','fri-4','fri-5','fri-6','fri-7','fri-8','fri-9','fri-10','fri-wild'];
+const SAT_IDS  = ['sat-0','sat-1','sat-2','sat-3','sat-4','sat-5','sat-6','sat-7','sat-8','sat-9','sat-opt'];
+const EXP_CHIP_IDS = ['fri-7','fri-8','fri-10','fri-wild'];
+const EXP_TOTAL = 10;
+const CL_FRI = ['cl-fri-1','cl-fri-2','cl-fri-3','cl-fri-4','cl-fri-5','cl-fri-6','cl-fri-7','cl-fri-8','cl-fri-9','cl-fri-10'];
+const CL_SAT = ['cl-sat-1','cl-sat-2','cl-sat-3','cl-sat-4','cl-sat-5','cl-sat-6','cl-sat-7','cl-sat-8','cl-sat-9','cl-sat-opt'];
+
+// ── STORAGE ────────────────────────────────────────────────────────
+function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+// ── DATE KEY / RESET ───────────────────────────────────────────────
+function todayKey(){const d=new Date();return`ubp_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`}
+function checkReset(){
+  const k=todayKey();
+  if(load('ubp_activedate')!==k){
+    store('ubp_activedate',k);
+    [...FRI_IDS,...SAT_IDS].forEach(id=>{store('ubp_rode_'+id,'');store('ubp_tap_'+id,'')});
+    [...CL_FRI,...CL_SAT].forEach(id=>store('ubp_cl_'+id,''));
+  }
+}
+
+// ── PIN ────────────────────────────────────────────────────────────
+let pinEntry = '';
+let isUnlocked = false;
+
+function handleLock(){
+  if(isUnlocked){ lock(); } else { openPin(); }
+}
+function openPin(){
+  pinEntry='';
+  updatePinDisplay();
+  document.getElementById('pinError').textContent='';
+  document.getElementById('pinOverlay').classList.add('show');
+}
+function closePin(){ document.getElementById('pinOverlay').classList.remove('show'); }
+function pinKey(d){
+  if(pinEntry.length>=4) return;
+  pinEntry+=d;
+  updatePinDisplay();
+  if(pinEntry.length===4) setTimeout(checkPin,120);
+}
+function pinDel(){ pinEntry=pinEntry.slice(0,-1); updatePinDisplay(); document.getElementById('pinError').textContent=''; }
+function updatePinDisplay(){
+  for(let i=1;i<=4;i++){
+    const dot=document.getElementById('pd'+i);
+    if(dot) dot.classList.toggle('filled', i<=pinEntry.length);
+  }
+}
+function checkPin(){
+  if(pinEntry===CORRECT_PIN){
+    isUnlocked=true;
+    document.body.classList.remove('locked');
+    document.getElementById('lockBtn').textContent='🔓';
+    document.getElementById('lockBtn').classList.add('unlocked');
+    store('ubp_unlocked_session', todayKey());
+    closePin();
+  } else {
+    document.getElementById('pinError').textContent='Incorrect PIN — try again';
+    pinEntry='';
+    updatePinDisplay();
+  }
+}
+function lock(){
+  isUnlocked=false;
+  document.body.classList.add('locked');
+  document.getElementById('lockBtn').textContent='🔒';
+  document.getElementById('lockBtn').classList.remove('unlocked');
+  store('ubp_unlocked_session','');
+}
+
+// ── RIDE → CHECKLIST MAP ───────────────────────────────────────────
+const RIDE_TO_CL = {
+  'fri-1':'cl-fri-1','fri-2':'cl-fri-2','fri-3':'cl-fri-3',
+  'fri-4':'cl-fri-4','fri-5':'cl-fri-5','fri-6':'cl-fri-6',
+  'fri-7':'cl-fri-7','fri-8':'cl-fri-8','fri-9':'cl-fri-9',
+  'fri-10':'cl-fri-10',
+  'sat-1':'cl-sat-1','sat-2':'cl-sat-2','sat-3':'cl-sat-3',
+  'sat-4':'cl-sat-4','sat-5':'cl-sat-5','sat-6':'cl-sat-6',
+  'sat-7':'cl-sat-7','sat-8':'cl-sat-8','sat-9':'cl-sat-9',
+  'sat-opt':'cl-sat-opt'
+};
+
+// ── TOGGLE RIDE CARD ───────────────────────────────────────────────
+function toggleRide(id){
+  if(!isUnlocked) return;
+  const card=document.getElementById(id);
+  const done=card.classList.toggle('done');
+  store('ubp_rode_'+id, done?'1':'');
+  const clId=RIDE_TO_CL[id];
+  if(clId){
+    const cl=document.getElementById(clId);
+    if(cl){ if(done) cl.classList.add('done'); else cl.classList.remove('done'); store('ubp_cl_'+clId, done?'1':''); }
+  }
+  updateUI();
+}
+
+// ── BURN EXPRESS TAP ───────────────────────────────────────────────
+function burnTap(id,e){
+  e.stopPropagation();
+  if(!isUnlocked) return;
+  const chip=document.getElementById('chip-'+id);
+  if(!chip) return;
+  const used=chip.classList.toggle('tap-used');
+  chip.textContent = used ? '✓ TAP USED' : '⚡ EXPRESS — TAP TO BURN';
+  store('ubp_tap_'+id, used?'1':'');
+  updateUI();
+}
+
+// ── TOGGLE CHECKLIST ITEM ──────────────────────────────────────────
+function toggleCL(id){
+  if(!isUnlocked) return;
+  const el=document.getElementById(id);
+  const done=el.classList.toggle('done');
+  store('ubp_cl_'+id, done?'1':'');
+}
+
+// ── UPDATE COUNTERS + DOTS ─────────────────────────────────────────
+function updateUI(){
+  const friDone=FRI_IDS.filter(id=>document.getElementById(id)&&document.getElementById(id).classList.contains('done')).length;
+  document.getElementById('progress-friday').innerHTML=`${friDone} <span>/ 11</span>`;
+
+  const tapsUsed=EXP_CHIP_IDS.filter(id=>{
+    const c=document.getElementById('chip-'+id);
+    return c&&c.classList.contains('tap-used');
+  }).length;
+  const remaining=Math.max(0,EXP_TOTAL-tapsUsed);
+  document.getElementById('express-taps').innerHTML=`${remaining} <span>of ${EXP_TOTAL}</span>`;
+  for(let i=1;i<=EXP_TOTAL;i++){
+    const dot=document.getElementById('dot-'+i);
+    if(dot) dot.classList.toggle('used', i<=tapsUsed);
+  }
+
+  const satDone=SAT_IDS.filter(id=>document.getElementById(id)&&document.getElementById(id).classList.contains('done')).length;
+  document.getElementById('progress-saturday').innerHTML=`${satDone} <span>/ 10</span>`;
+}
+
+// ── RESTORE STATE ──────────────────────────────────────────────────
+function restoreState(){
+  [...FRI_IDS,...SAT_IDS].forEach(id=>{
+    if(load('ubp_rode_'+id)==='1'){
+      const el=document.getElementById(id);
+      if(el) el.classList.add('done');
+    }
+  });
+  EXP_CHIP_IDS.forEach(id=>{
+    if(load('ubp_tap_'+id)==='1'){
+      const chip=document.getElementById('chip-'+id);
+      if(chip){chip.classList.add('tap-used');chip.textContent='✓ TAP USED';}
+    }
+  });
+  [...CL_FRI,...CL_SAT].forEach(id=>{
+    if(load('ubp_cl_'+id)==='1'){
+      const el=document.getElementById(id);
+      if(el) el.classList.add('done');
+    }
+  });
+  // Restore session unlock (same day only)
+  if(load('ubp_unlocked_session')===todayKey()){
+    isUnlocked=true;
+    document.body.classList.remove('locked');
+    document.getElementById('lockBtn').textContent='🔓';
+    document.getElementById('lockBtn').classList.add('unlocked');
+  }
+  updateUI();
+}
+
+// ── TAB SWITCHING ──────────────────────────────────────────────────
+function switchDay(day){
+  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+day).classList.add('active');
+  document.querySelectorAll('.tab-btn')[day==='friday'?0:1].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────
+checkReset();
+restoreState();
+</script>
+</body>
+</html>
