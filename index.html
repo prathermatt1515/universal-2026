@@ -139,6 +139,8 @@
   .cl-item.done .cl-name{color:var(--done-text);text-decoration:line-through;text-decoration-color:#AAA}
   .cl-fp{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:var(--gold);background:#3A2000;border-radius:2px;padding:1px 4px;white-space:nowrap}
   .cl-item.done .cl-fp{background:#CCC;color:#888}
+  .cl-fp.fp-used{background:#888;color:#FFF;text-decoration:line-through}
+  .cl-fp.fp-avail{background:#3A2000;color:var(--gold)}
   .cl-check{width:24px;height:24px;border:2px solid #BBB;border-radius:4px;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;font-weight:900}
   .cl-item.done .cl-check{background:var(--done-check);border-color:var(--done-check);color:#fff}
   body.locked .cl-item{cursor:default}
@@ -245,6 +247,8 @@
       <div class="ride-name">Monsters Unchained: The Frankenstein Experiment</div>
       <div class="ride-note">Best dark ride in the park. Walk-on early — standby now, cash the Express tap on a re-ride this afternoon when it's 60+ min.</div>
       <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-1" onclick="burnTap('fri-1',event)">⚡ EXPRESS RE-RIDE — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap when you use the re-ride Express tap</span>
     </div>
     <div class="cbox" onclick="toggleRide('fri-1')">✓</div>
   </div>
@@ -254,6 +258,8 @@
       <div class="ride-name">Curse of the Werewolf</div>
       <div class="ride-note">Right there in Dark Universe. Walk-on early. Bank the Express tap — use it this afternoon.</div>
       <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-2" onclick="burnTap('fri-2',event)">⚡ EXPRESS RE-RIDE — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap when you use the re-ride Express tap</span>
     </div>
     <div class="cbox" onclick="toggleRide('fri-2')">✓</div>
   </div>
@@ -265,6 +271,8 @@
       <div class="ride-name">Hiccup's Wing Gliders</div>
       <div class="ride-note">Family coaster. Low wait early. Standby now — Express tap saved for afternoon re-ride.</div>
       <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-3" onclick="burnTap('fri-3',event)">⚡ EXPRESS RE-RIDE — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap when you use the re-ride Express tap</span>
     </div>
     <div class="cbox" onclick="toggleRide('fri-3')">✓</div>
   </div>
@@ -274,6 +282,8 @@
       <div class="ride-name">Fyre Drill</div>
       <div class="ride-note">Low wait at open. Waits spike hard in Florida afternoon heat — that's when we use the Express tap.</div>
       <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-4" onclick="burnTap('fri-4',event)">⚡ EXPRESS RE-RIDE — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap when you use the re-ride Express tap</span>
     </div>
     <div class="cbox" onclick="toggleRide('fri-4')">✓</div>
   </div>
@@ -294,6 +304,8 @@
       <div class="ride-name">Stardust Racers</div>
       <div class="ride-note">Top thrill coaster. Standby now while it's short. Express tap saved for afternoon re-ride at 60+ min.</div>
       <span class="chip chip-STANDBY">STANDBY → EXPRESS RE-RIDE PM</span>
+      <span class="chip chip-EXPRESS tappable" id="chip-fri-6" onclick="burnTap('fri-6',event)">⚡ EXPRESS RE-RIDE — TAP TO BURN</span>
+      <span class="tap-hint">👆 Tap when you use the re-ride Express tap</span>
     </div>
     <div class="cbox" onclick="toggleRide('fri-6')">✓</div>
   </div>
@@ -391,16 +403,16 @@
   <!-- RIDE CHECKLIST FRIDAY -->
   <div class="divider"><h3>✅ Full Ride Checklist — Friday</h3></div>
   <div class="checklist-grid">
-    <div class="cl-item" id="cl-fri-1" onclick="toggleCL('cl-fri-1')"><span class="cl-fp">⚡FP</span><span class="cl-name">Monsters Unchained</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-2" onclick="toggleCL('cl-fri-2')"><span class="cl-fp">⚡FP</span><span class="cl-name">Curse of the Werewolf</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-3" onclick="toggleCL('cl-fri-3')"><span class="cl-fp">⚡FP</span><span class="cl-name">Hiccup's Wing Gliders</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-4" onclick="toggleCL('cl-fri-4')"><span class="cl-fp">⚡FP</span><span class="cl-name">Fyre Drill</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-1" onclick="toggleCL('cl-fri-1')"><span class="cl-fp" id="fps-fri-1">⚡ AVAIL</span><span class="cl-name">Monsters Unchained</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-2" onclick="toggleCL('cl-fri-2')"><span class="cl-fp" id="fps-fri-2">⚡ AVAIL</span><span class="cl-name">Curse of the Werewolf</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-3" onclick="toggleCL('cl-fri-3')"><span class="cl-fp" id="fps-fri-3">⚡ AVAIL</span><span class="cl-name">Hiccup's Wing Gliders</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-4" onclick="toggleCL('cl-fri-4')"><span class="cl-fp" id="fps-fri-4">⚡ AVAIL</span><span class="cl-name">Fyre Drill</span><div class="cl-check">✓</div></div>
     <div class="cl-item" id="cl-fri-5" onclick="toggleCL('cl-fri-5')"><span class="cl-name">Dragon Racer's Rally</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-6" onclick="toggleCL('cl-fri-6')"><span class="cl-fp">⚡FP</span><span class="cl-name">Stardust Racers</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-7" onclick="toggleCL('cl-fri-7')"><span class="cl-fp">⚡FP</span><span class="cl-name">Mario Kart: Bowser's Challenge</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-8" onclick="toggleCL('cl-fri-8')"><span class="cl-fp">⚡FP</span><span class="cl-name">Mine-Cart Madness</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-9" onclick="toggleCL('cl-fri-9')"><span class="cl-fp">⚡FP</span><span class="cl-name">Yoshi's Adventure</span><div class="cl-check">✓</div></div>
-    <div class="cl-item" id="cl-fri-10" onclick="toggleCL('cl-fri-10')"><span class="cl-fp">⚡FP</span><span class="cl-name">Battle at the Ministry</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-6" onclick="toggleCL('cl-fri-6')"><span class="cl-fp" id="fps-fri-6">⚡ AVAIL</span><span class="cl-name">Stardust Racers</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-7" onclick="toggleCL('cl-fri-7')"><span class="cl-fp" id="fps-fri-7">⚡ AVAIL</span><span class="cl-name">Mario Kart: Bowser's Challenge</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-8" onclick="toggleCL('cl-fri-8')"><span class="cl-fp" id="fps-fri-8">⚡ AVAIL</span><span class="cl-name">Mine-Cart Madness</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-9" onclick="toggleCL('cl-fri-9')"><span class="cl-fp" id="fps-fri-9">⚡ AVAIL</span><span class="cl-name">Yoshi's Adventure</span><div class="cl-check">✓</div></div>
+    <div class="cl-item" id="cl-fri-10" onclick="toggleCL('cl-fri-10')"><span class="cl-fp" id="fps-fri-10">⚡ AVAIL</span><span class="cl-name">Battle at the Ministry</span><div class="cl-check">✓</div></div>
   </div>
 
   <!-- LINKS FRIDAY -->
@@ -599,7 +611,7 @@
 const CORRECT_PIN = '1551';
 const FRI_IDS  = ['fri-0','fri-1','fri-2','fri-3','fri-4','fri-5','fri-6','fri-7','fri-8','fri-9','fri-10','fri-wild'];
 const SAT_IDS  = ['sat-0','sat-1','sat-2','sat-3','sat-4','sat-5','sat-6','sat-7','sat-8','sat-9','sat-opt'];
-const EXP_CHIP_IDS = ['fri-7','fri-8','fri-10','fri-wild'];
+const EXP_CHIP_IDS = ['fri-1','fri-2','fri-3','fri-4','fri-6','fri-7','fri-8','fri-10','fri-wild'];
 const EXP_TOTAL = 10;
 const CL_FRI = ['cl-fri-1','cl-fri-2','cl-fri-3','cl-fri-4','cl-fri-5','cl-fri-6','cl-fri-7','cl-fri-8','cl-fri-9','cl-fri-10'];
 const CL_SAT = ['cl-sat-1','cl-sat-2','cl-sat-3','cl-sat-4','cl-sat-5','cl-sat-6','cl-sat-7','cl-sat-8','cl-sat-9','cl-sat-opt'];
@@ -714,6 +726,19 @@ function toggleCL(id){
   store('ubp_cl_'+id, done?'1':'');
 }
 
+// ── UPDATE FP STATUS BADGES IN CHECKLIST ──────────────────────────
+const FP_RIDE_IDS = ['fri-1','fri-2','fri-3','fri-4','fri-6','fri-7','fri-8','fri-9','fri-10'];
+function updateFPStatus(){
+  FP_RIDE_IDS.forEach(rid=>{
+    const badge = document.getElementById('fps-'+rid);
+    if(!badge) return;
+    const chip = document.getElementById('chip-'+rid);
+    const used = chip && chip.classList.contains('tap-used');
+    badge.textContent = used ? '✓ FP USED' : '⚡ AVAIL';
+    badge.className = 'cl-fp ' + (used ? 'fp-used' : 'fp-avail');
+  });
+}
+
 // ── UPDATE COUNTERS + DOTS ─────────────────────────────────────────
 function updateUI(){
   const friDone=FRI_IDS.filter(id=>document.getElementById(id)&&document.getElementById(id).classList.contains('done')).length;
@@ -729,6 +754,7 @@ function updateUI(){
     const dot=document.getElementById('dot-'+i);
     if(dot) dot.classList.toggle('used', i<=tapsUsed);
   }
+  updateFPStatus();
 
   const satDone=SAT_IDS.filter(id=>document.getElementById(id)&&document.getElementById(id).classList.contains('done')).length;
   document.getElementById('progress-saturday').innerHTML=`${satDone} <span>/ 10</span>`;
@@ -754,6 +780,7 @@ function restoreState(){
       if(el) el.classList.add('done');
     }
   });
+  updateFPStatus();
   // Restore session unlock (same day only)
   if(load('ubp_unlocked_session')===todayKey()){
     isUnlocked=true;
