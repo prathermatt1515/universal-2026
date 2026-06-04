@@ -30,6 +30,8 @@
   header .sub{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
   .lock-btn{flex-shrink:0;background:none;border:2px solid #555;border-radius:6px;color:#AAA;padding:6px 9px;font-size:17px;cursor:pointer;line-height:1}
   .lock-btn.unlocked{border-color:var(--gold);color:var(--gold)}
+  .reset-btn{background:none;border:2px solid #555;border-radius:6px;color:#888;padding:3px 8px;font-size:13px;cursor:pointer;line-height:1;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.04em}
+  .reset-btn:active{border-color:#CC2200;color:#CC2200}
 
   /* PIN MODAL */
   .pin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:999;align-items:center;justify-content:center}
@@ -206,6 +208,34 @@
 <body class="locked">
 
 <!-- PIN MODAL -->
+<div class="pin-overlay" id="resetOverlay">
+  <div class="pin-box">
+    <div class="pin-title">Reset Checklist</div>
+    <div class="pin-sub">Enter PIN to clear all checkboxes and Express taps</div>
+    <div class="pin-display">
+      <div class="pin-dot" id="rd1"></div>
+      <div class="pin-dot" id="rd2"></div>
+      <div class="pin-dot" id="rd3"></div>
+      <div class="pin-dot" id="rd4"></div>
+    </div>
+    <div class="pin-error" id="resetError"></div>
+    <div class="numpad">
+      <button class="num-btn" onclick="resetKey('1')">1</button>
+      <button class="num-btn" onclick="resetKey('2')">2</button>
+      <button class="num-btn" onclick="resetKey('3')">3</button>
+      <button class="num-btn" onclick="resetKey('4')">4</button>
+      <button class="num-btn" onclick="resetKey('5')">5</button>
+      <button class="num-btn" onclick="resetKey('6')">6</button>
+      <button class="num-btn" onclick="resetKey('7')">7</button>
+      <button class="num-btn" onclick="resetKey('8')">8</button>
+      <button class="num-btn" onclick="resetKey('9')">9</button>
+      <button class="num-btn zero" onclick="resetKey('0')">0</button>
+      <button class="num-btn del" onclick="resetDel()">⌫</button>
+    </div>
+    <button class="pin-cancel" onclick="closeReset()">Cancel</button>
+  </div>
+</div>
+
 <div class="pin-overlay" id="pinOverlay">
   <div class="pin-box">
     <div class="pin-title">Enter PIN</div>
@@ -235,12 +265,12 @@
 </div>
 
 <header>
-  <div style="width:44px"></div>
+  <button class="lock-btn" id="lockBtn" onclick="handleLock()">🔒</button>
   <div class="header-text">
     <h1>Prather / Arras — Universal Battle Plan</h1>
     <div class="sub">Orlando · June 5 &amp; 6, 2026</div>
   </div>
-  <button class="lock-btn" id="lockBtn" onclick="handleLock()">🔒</button>
+  <button class="reset-btn" onclick="handleReset()">↺ Reset</button>
 </header>
 
 <div class="tabs-wrap">
@@ -469,7 +499,7 @@
     <a class="link-btn" href="https://play.google.com/store/apps/details?id=com.universalorlando.uo" target="_blank">📱 Universal App — Android</a>
     <a class="link-btn" href="https://www.universalorlando.com/web/en/us/plan-your-visit/park-maps" target="_blank">🗺 Official Park Maps</a>
   </div>
-  <div class="reset-note">Checklist auto-resets at midnight each day.</div>
+  
 </div>
 
 <!-- ══════════════ SATURDAY ══════════════ -->
@@ -650,7 +680,7 @@
     <a class="link-btn" href="https://play.google.com/store/apps/details?id=com.universalorlando.uo" target="_blank">📱 Universal App — Android</a>
     <a class="link-btn" href="https://www.universalorlando.com/web/en/us/plan-your-visit/park-maps" target="_blank">🗺 Official Park Maps</a>
   </div>
-  <div class="reset-note">Checklist auto-resets at midnight each day.</div>
+  
 </div>
 
 <script>
@@ -668,14 +698,9 @@ function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
 
 // ── DATE KEY / RESET ───────────────────────────────────────────────
-function todayKey(){const d=new Date();return`ubp_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`}
+function todayKey(){ return 'ubp_session'; }
 function checkReset(){
-  const k=todayKey();
-  if(load('ubp_activedate')!==k){
-    store('ubp_activedate',k);
-    [...FRI_IDS,...SAT_IDS].forEach(id=>{store('ubp_rode_'+id,'');store('ubp_tap_'+id,'')});
-    [...CL_FRI,...CL_SAT].forEach(id=>store('ubp_cl_'+id,''));
-  }
+  // Auto-reset disabled — state persists until manually cleared
 }
 
 // ── PIN ────────────────────────────────────────────────────────────
@@ -847,6 +872,52 @@ function switchDay(day){
   const btn=document.getElementById(map[day]);
   if(btn) btn.classList.add('active');
   window.scrollTo(0,0);
+}
+
+// ── RESET MODAL ───────────────────────────────────────────────────
+let resetEntry = '';
+function handleReset(){ resetEntry=''; updateResetDisplay(); document.getElementById('resetError').textContent=''; document.getElementById('resetOverlay').classList.add('show'); }
+function closeReset(){ document.getElementById('resetOverlay').classList.remove('show'); }
+function resetKey(d){
+  if(resetEntry.length>=4) return;
+  resetEntry+=d;
+  updateResetDisplay();
+  if(resetEntry.length===4) setTimeout(checkResetPin,120);
+}
+function resetDel(){ resetEntry=resetEntry.slice(0,-1); updateResetDisplay(); document.getElementById('resetError').textContent=''; }
+function updateResetDisplay(){
+  for(let i=1;i<=4;i++){
+    const dot=document.getElementById('rd'+i);
+    if(dot) dot.classList.toggle('filled', i<=resetEntry.length);
+  }
+}
+function checkResetPin(){
+  if(resetEntry===CORRECT_PIN){
+    // Clear all ride cards
+    [...FRI_IDS,...SAT_IDS].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.remove('done');
+      store('ubp_rode_'+id,'');
+    });
+    // Clear all Express chips
+    EXP_CHIP_IDS.forEach(id=>{
+      const chip=document.getElementById('chip-'+id);
+      if(chip){ chip.classList.remove('tap-used'); chip.textContent='⚡ EXPRESS — TAP TO BURN'; }
+      store('ubp_tap_'+id,'');
+    });
+    // Clear checklist items
+    [...CL_FRI,...CL_SAT].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.classList.remove('done');
+      store('ubp_cl_'+id,'');
+    });
+    updateUI();
+    closeReset();
+  } else {
+    document.getElementById('resetError').textContent='Incorrect PIN — try again';
+    resetEntry='';
+    updateResetDisplay();
+  }
 }
 
 // ── INIT ───────────────────────────────────────────────────────────
