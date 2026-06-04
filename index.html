@@ -49,15 +49,24 @@
   .pin-cancel{width:100%;padding:10px;border:none;background:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#888;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;margin-top:4px}
 
   /* TABS */
-  .tabs{display:flex;background:#1A1A1A;border-bottom:2px solid var(--gold);position:sticky;top:71px;z-index:99}
-  .tab-btn{flex:1;padding:10px 6px;border:none;background:transparent;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#888;cursor:pointer;border-bottom:3px solid transparent}
-  .tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+  .tabs-wrap{position:sticky;top:71px;z-index:99;background:#1A1A1A}
+  .tabs-row{display:flex;border-bottom:1px solid #333}
+  .tabs-row-gp{border-bottom:2px solid var(--gold)}
+  .tab-btn{flex:1;padding:9px 6px;border:none;background:transparent;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border-bottom:3px solid transparent;line-height:1.2;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+  .tab-day{font-size:13px;font-weight:900;color:var(--gold)}
+  .tab-sub{font-size:13px;font-weight:600;color:#444;letter-spacing:.04em}
+  .tab-btn:hover .tab-sub{color:#888}
+  .tab-btn.active{border-bottom-color:var(--gold);background:#2A2A2A}
+  .tab-btn.active .tab-sub{color:#FFFFFF}
+  .tab-btn-gp .tab-day{color:#4CC9E0}
+  .tab-btn-gp.active{border-bottom-color:#4CC9E0;background:#2A2A2A}
+  .tab-btn-gp.active .tab-sub{color:#FFFFFF}
 
   /* PANELS */
   .day-panel{display:none;padding-bottom:60px}.day-panel.active{display:block}
 
   /* SECTION BAR */
-  .section-bar{background:var(--section-bar);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:119px;z-index:90;border-bottom:1px solid #444}
+  .section-bar{background:var(--section-bar);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:139px;z-index:90;border-bottom:1px solid #444}
   .section-bar h2{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:#AAA;letter-spacing:.1em;text-transform:uppercase}
   .progress-badge{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:21px;color:#fff;line-height:1}
   .progress-badge span{font-size:12px;font-weight:500;color:#888}
@@ -164,6 +173,34 @@
   .link-btn{display:block;padding:12px 16px;background:#111;color:#fff;text-decoration:none;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.04em;text-align:center;border:1px solid #444}
   .link-btn:active{background:#333}
   .reset-note{text-align:center;padding:12px;font-size:11px;color:#AAA;font-style:italic}
+
+  /* ── GRANDPARENT TABS ── */
+  .gp-panel { display:none; padding-bottom:60px; }
+  .gp-panel.active { display:block; }
+  .gp-header { background:#0D5C6E; padding:12px 16px; position:sticky; top:139px; z-index:90; border-bottom:2px solid #4CC9E0; display:flex; align-items:center; justify-content:space-between; }
+  .gp-header h2 { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:#B0EAF5; letter-spacing:.1em; text-transform:uppercase; }
+  .gp-area-band { background:#0A4A5A; padding:8px 16px; border-top:2px solid #4CC9E0; border-bottom:1px solid #1A7A8A; margin-top:4px; }
+  .gp-area-band h3 { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:900; color:#4CC9E0; letter-spacing:.06em; text-transform:uppercase; }
+  .gp-card { background:#fff; border-bottom:1px solid #C0E8F0; padding:14px 16px; }
+  .gp-card-title { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:900; color:#0A4A5A; line-height:1.2; letter-spacing:.01em; }
+  .gp-card-note { font-family:'Barlow',sans-serif; font-size:15px; color:#1A3A44; line-height:1.5; margin-top:4px; }
+  .gp-badge { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:900; letter-spacing:.06em; padding:3px 10px; border-radius:4px; margin-top:6px; border:2px solid; }
+  .gp-go { background:#D0F5E8; color:#0A4A1A; border-color:#2AAA60; }
+  .gp-risk { background:#FFF0C0; color:#7A4A00; border-color:#D4960A; }
+  .gp-show { background:#E0F0FF; color:#0A2A6A; border-color:#2060B0; }
+  .gp-bar { background:#F0E8FF; color:#3A0A6A; border-color:#7040B0; }
+  .gp-shop { background:#FFE8F0; color:#6A0A2A; border-color:#B04070; }
+  .gp-gem { background:#FFF8E0; color:#6A4A00; border-color:#C8900A; }
+  .gp-divider { background:#0D5C6E; padding:9px 16px; margin-top:6px; border-top:2px solid #4CC9E0; }
+  .gp-divider h3 { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#4CC9E0; }
+  .gp-tip { display:flex; gap:10px; padding:12px 16px; border-bottom:1px solid #C0E8F0; background:#F0FBFF; align-items:flex-start; }
+  .gp-tip-bullet { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:900; color:#0D7A8A; flex-shrink:0; line-height:1.5; }
+  .gp-tip-text { font-size:15px; color:#0A2A34; line-height:1.5; }
+  .gp-tip-text strong { font-weight:700; color:#0A4A5A; }
+  .gp-callout { padding:13px 16px; border-left:4px solid #4CC9E0; background:#E8F8FF; border-bottom:1px solid #C0E8F0; }
+  .gp-callout p { font-family:'Barlow',sans-serif; font-size:15px; color:#0A2A34; line-height:1.5; }
+  .gp-callout strong { color:#0A4A5A; font-weight:700; }
+
 </style>
 </head>
 <body class="locked">
@@ -206,9 +243,15 @@
   <button class="lock-btn" id="lockBtn" onclick="handleLock()">🔒</button>
 </header>
 
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchDay('friday')">⚡ FRI — Epic Universe</button>
-  <button class="tab-btn" onclick="switchDay('saturday')">🗺 SAT — Studios + Islands</button>
+<div class="tabs-wrap">
+  <div class="tabs-row">
+    <button class="tab-btn active" id="btn-friday" onclick="switchDay('friday')"><span class="tab-day">⚡ FRI</span><span class="tab-sub">Epic</span></button>
+    <button class="tab-btn" id="btn-saturday" onclick="switchDay('saturday')"><span class="tab-day">🗺 SAT</span><span class="tab-sub">2 Parks</span></button>
+  </div>
+  <div class="tabs-row tabs-row-gp">
+    <button class="tab-btn tab-btn-gp" id="btn-gpfriday" onclick="switchDay('gpfriday')"><span class="tab-day">👴 FRI</span><span class="tab-sub">GP</span></button>
+    <button class="tab-btn tab-btn-gp" id="btn-gpsaturday" onclick="switchDay('gpsaturday')"><span class="tab-day">👴 SAT</span><span class="tab-sub">GP</span></button>
+  </div>
 </div>
 
 <!-- ══════════════ FRIDAY ══════════════ -->
@@ -797,10 +840,12 @@ function restoreState(){
 
 // ── TAB SWITCHING ──────────────────────────────────────────────────
 function switchDay(day){
-  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.day-panel, .gp-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+day).classList.add('active');
-  document.querySelectorAll('.tab-btn')[day==='friday'?0:1].classList.add('active');
+  const map={'friday':'btn-friday','saturday':'btn-saturday','gpfriday':'btn-gpfriday','gpsaturday':'btn-gpsaturday'};
+  const btn=document.getElementById(map[day]);
+  if(btn) btn.classList.add('active');
   window.scrollTo(0,0);
 }
 
@@ -808,5 +853,297 @@ function switchDay(day){
 checkReset();
 restoreState();
 </script>
+
+<!-- ══════════════ FRIDAY GRANDPARENTS ══════════════ -->
+<div class="gp-panel" id="panel-gpfriday">
+  <div class="gp-header">
+    <h2>👴 Friday — Epic Universe · Your Day</h2>
+  </div>
+  <div class="gp-callout">
+    <p><strong>Your game plan:</strong> Epic Universe is one of the most visually stunning parks ever built. You don't need to ride everything to have an extraordinary day. The shows, bars, street entertainment, and atmosphere here are genuinely world-class. Every area below tells you what to do while the group is on the big rides — and what hidden gems to hunt for.</p>
+  </div>
+
+  <div class="gp-area-band"><h3>🧟 Dark Universe — First Stop with Group</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Monsters Unchained: The Frankenstein Experiment</div>
+    <div class="gp-card-note">Robotic arm dark ride through Frankenstein's lab. No drops or coaster elements but the seat tilts and moves significantly in all directions. Genuinely scary atmosphere. Try it if you handle motion well.</div>
+    <span class="gp-badge gp-risk">⚠️ TRY AT YOUR OWN RISK</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Curse of the Werewolf</div>
+    <div class="gp-card-note">Free-spinning outdoor coaster. The spin is unpredictable — depends entirely on weight distribution in the car. Could be mild or could spin aggressively. Approach with caution if spinning bothers you.</div>
+    <span class="gp-badge gp-risk">⚠️ TRY AT YOUR OWN RISK</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍺 Burning Blade Tavern — Hidden Gem Bar</div>
+    <div class="gp-card-note">Themed after the original 1931 Frankenstein film. Gothic atmosphere, specialty cocktails, and draft beers with names drawn from classic Universal monster lore. One of the most atmospheric bars in any theme park. Especially good in the evening when the fog machines kick in.</div>
+    <span class="gp-badge gp-bar">🍸 COCKTAILS + DRAFT BEER</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎻 Roaming Violinists of Darkmoor Village</div>
+    <div class="gp-card-note">Street performers in full monster costume wander the village between haunting violin melodies — sharing legends of the monsters between songs. The Invisible Man character also roams the streets and delivers snide comments to unsuspecting guests. Pure hidden gem entertainment that most people walk right past.</div>
+    <span class="gp-badge gp-gem">💎 HIDDEN GEM</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">💄 Darkmoor Monster Makeup Experience</div>
+    <div class="gp-card-note">Professional theatrical makeup artists transform you into Dracula, a Werewolf, or other classic Universal monsters using prosthetics and airbrush. Walk-ins accepted. Basic experience starts at $45, full transformation from $169. Reservations recommended. One of the most unique experiences at any theme park — not just a photo op, it's a full theatrical production.</div>
+    <span class="gp-badge gp-gem">💎 UNIQUE EXPERIENCE · BOOK AHEAD</span>
+  </div>
+
+  <div class="gp-area-band"><h3>🐉 Isle of Berk</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Fyre Drill</div>
+    <div class="gp-card-note">Interactive boat ride — you man water cannons to battle fires across a themed course. Gentle, fun, and you may get lightly splashed. Easy ride for everyone.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Dragon Racer's Rally</div>
+    <div class="gp-card-note">Sky flyer ride where you control your own dragon's flips and spins using handles. You're in full control of how much you spin. Keep it gentle and it's a smooth, scenic experience with great views.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — YOU CONTROL THE SPIN</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎭 The Untrainable Dragon — Live Show</div>
+    <div class="gp-card-note">Full live stage show featuring Hiccup, Toothless, and a wild new dragon. Toothless soars overhead on a nearly 27-foot wingspan animatronic. Multiple shows daily — check the Universal app for times. This is a standout show, not a throwaway entertainment filler. Find a seat early.</div>
+    <span class="gp-badge gp-show">🎭 MUST-SEE SHOW</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🐉 Free-Flying Dragon Drones</div>
+    <div class="gp-card-note">Throughout the day, dragon-shaped drones soar overhead across Isle of Berk. Easy to miss if you're moving fast. Find a bench in the village square and just look up — one of the most surreal things in any theme park.</div>
+    <span class="gp-badge gp-gem">💎 HIDDEN GEM — LOOK UP</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍺 Mead Hall</div>
+    <div class="gp-card-note">Viking-themed dining hall with authentic mead drinks and Norse-influenced cocktails. Hearty Viking fare. Good spot to sit down, rest, and people-watch while the group rides Hiccup's Wing Gliders.</div>
+    <span class="gp-badge gp-bar">🍸 MEAD + NORSE COCKTAILS</span>
+  </div>
+
+  <div class="gp-area-band"><h3>🌠 Celestial Park — The Hub</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Constellation Carousel</div>
+    <div class="gp-card-note">The most spectacular carousel ever built — celestial animal carriages (lions, dragons, peacocks) on a figure-eight path through the Milky Way. No height requirement, no intensity. Stunning at night when the lights come on. Ride it twice if you want.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — ESPECIALLY AT NIGHT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍸 Bar Zenith — Hidden Gem Cocktail Bar</div>
+    <div class="gp-card-note">Sleek outdoor bar with elevated design right next to Stardust Racers. Outdoor seating with perfect views of the mini fountain shows that run throughout the day. Craft cocktails from $15-18. The best place in Celestial Park to sit, sip, and watch the world go by.</div>
+    <span class="gp-badge gp-bar">🍸 CRAFT COCKTAILS · FOUNTAIN VIEWS</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🌴 CelesTiki — Frozen Cocktail Bar</div>
+    <div class="gp-card-note">Subtle tiki theme near the carousel. Tropical frozen cocktails and the Elixir mocktail on the rocks. More casual than Bar Zenith. Look for a hidden tribute to Volcano Bay on the sign and the menu.</div>
+    <span class="gp-badge gp-bar">🍸 FROZEN COCKTAILS · TIKI VIBES</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🦞 The Atlantic Restaurant Bar — Best Hidden Gem</div>
+    <div class="gp-card-note">Tucked just beyond the Great Barrier Reef theming in Celestial Park. Upscale seafood restaurant with a full bar — but here's the secret: you can sit at the bar and order drinks without a dining reservation or paying for a full meal. Classy, quiet, and most guests walk right past it.</div>
+    <span class="gp-badge gp-gem">💎 BEST HIDDEN BAR IN THE PARK · NO RESERVATION NEEDED</span>
+  </div>
+
+  <div class="gp-area-band"><h3>⚡ Ministry of Magic — Save Time Here</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎪 Le Cirque Arcanus — Don't Miss This</div>
+    <div class="gp-card-note">Full-scale live theatre with Fantastic Beasts characters, live performers, puppetry, and special effects. Set in a 1920s Parisian magical circus. Multiple shows daily — check the Universal app. This is the grandparent highlight of the entire trip. Get there 15 minutes early for a good seat.</div>
+    <span class="gp-badge gp-show">🎭 MUST-SEE SHOW · GET THERE EARLY</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎺 Place Cachée Jazz Band</div>
+    <div class="gp-card-note">Live jazz band performing in the Parisian streets of the Ministry with audience participation and magical surprise elements woven into the performance. Pops up throughout the day — no schedule, just wander and you'll find them. The 1920s Paris theming here is the most beautiful land in any Universal park.</div>
+    <span class="gp-badge gp-gem">💎 HIDDEN GEM · STREET PERFORMANCE</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍸 Bar Moonshine — Best Cocktail Bar at Epic</div>
+    <div class="gp-card-note">Tucked in a far corner of Ministry of Magic with very little foot traffic. French wizarding theme — feels like a secret Parisian speakeasy. Signature cocktails include the Astro Lobe and the Giggle Water. One reviewer called it the spot that "transports you directly to Paris." This is the grandparent drink destination of the day.</div>
+    <span class="gp-badge gp-bar">🍸 WIZARDING COCKTAILS · HIDDEN CORNER</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🕯️ Le Gobelet Noir — Atmospheric Dining</div>
+    <div class="gp-card-note">Candlelit restaurant styled as a hideaway for Dark witches and wizards. Wizarding lore woven into every menu item and detail. Even if you don't eat a full meal, worth stepping inside to see the interior. One of the most immersive dining environments in any theme park.</div>
+    <span class="gp-badge gp-gem">💎 HIDDEN GEM DINING · MOST IMMERSIVE INTERIOR</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🧁 Bièraubeurre Cart — French Butterbeer</div>
+    <div class="gp-card-note">The French version of Butterbeer. Available hot, iced, frozen, plus Butterbeer ice cream and fudge. Right in the heart of the Parisian streets. A different recipe from the standard Butterbeer — worth trying both versions across the two days.</div>
+    <span class="gp-badge gp-gem">💎 MUST TRY · DIFFERENT FROM STANDARD BUTTERBEER</span>
+  </div>
+
+  <div class="gp-divider"><h3>📋 Grandparent Tips — Friday</h3></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Download the Universal app.</strong> It shows live show times for Le Cirque Arcanus and The Untrainable Dragon. Check it in the morning and build your show schedule around the group's ride plan.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Start your day with the group in Dark Universe.</strong> Both the Burning Blade Tavern and the roaming monster entertainers are early-morning highlights before the crowds build.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>The Atlantic bar is your afternoon anchor.</strong> When the group is doing Express re-rides from 1-4pm, stake out a seat at the Atlantic bar in Celestial Park. Cold drink, great view, no reservation needed.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Bar Moonshine in the evening.</strong> Once the group heads to Ministry of Magic for Battle at the Ministry, split off and find Bar Moonshine in the far corner. It's quieter in the final two hours of the day.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Constellation Carousel at night.</strong> The carousel and Celestial Park after dark are the best photo opportunity of the entire trip. Find the group and do this together at closing.</div></div>
+</div>
+
+<!-- ══════════════ SATURDAY GRANDPARENTS ══════════════ -->
+<div class="gp-panel" id="panel-gpsaturday">
+  <div class="gp-header">
+    <h2>👴 Saturday — Studios + Islands · Your Day</h2>
+  </div>
+  <div class="gp-callout">
+    <p><strong>Your game plan:</strong> Saturday is actually a great day for the grandparents. No Express Pass means shorter lines for the gentler rides — while the group queues for the coasters, you can roll through Spider-Man, Transformers, MIB, and Gringotts with minimal waiting. Plus Saturday has the best bars and shows of the two days — Hog's Head pub, Celestina Warbeck live jazz, and Diagon Alley's hidden gems.</p>
+  </div>
+
+  <div class="gp-area-band"><h3>🧙 Hogsmeade — Islands of Adventure</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Harry Potter and the Forbidden Journey</div>
+    <div class="gp-card-note">Robotic arm dark ride inside Hogwarts Castle. No real drops but the seat tilts significantly — feet go above your head at one point. Significant motion sickness risk. The castle queue itself is extraordinary and worth the walk-through even if you skip the ride. Check out the moving portraits, talking sorting hat, and Defence Against the Dark Arts classroom.</div>
+    <span class="gp-badge gp-risk">⚠️ TRY AT YOUR OWN RISK · QUEUE IS A GEM EVEN IF YOU SKIP THE RIDE</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Flight of the Hippogriff</div>
+    <div class="gp-card-note">Small family coaster in Hogsmeade. Genuinely mild — short track, soft turns, nothing intense. Fine for almost anyone.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — VERY MILD</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍺 Hog's Head Pub — Best Bar at Islands</div>
+    <div class="gp-card-note">Tucked behind Three Broomsticks in Hogsmeade. The only bar in Islands that pours shots, doubles, and multi-alcohol drinks. Exclusive Hog's Head Brew on tap. Secret off-menu cocktails — ask the bartender for Hog's Tea (raspberry Long Island iced tea) or the triple-layered cider/ale/porter potion. Tip the barkeep and the animatronic hog head behind the bar comes to life, snorts, and looks around. One of the best hidden bar experiences in any theme park.</div>
+    <span class="gp-badge gp-gem">💎 SECRET OFF-MENU COCKTAILS · TIP THE BARKEEP</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🧁 Honeydukes + Dervish and Banges</div>
+    <div class="gp-card-note">Honeydukes sells Chocolate Frogs, Bertie Bott's Every Flavour Beans, and other wizarding sweets. Dervish and Banges is the Quidditch and school supplies shop. Both are immersive and worth a slow browse — most guests rush through.</div>
+    <span class="gp-badge gp-shop">🛍️ SHOPPING · GREAT GIFTS</span>
+  </div>
+
+  <div class="gp-area-band"><h3>🦸 Marvel + Jurassic — Mid Morning</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">The Amazing Adventures of Spider-Man</div>
+    <div class="gp-card-note">Screen-based dark ride — gentle motion, fun storytelling, no real intensity. One of the smoothest rides in either park. Single rider line moves fast. Go while the group rides Hulk.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Skull Island: Reign of Kong</div>
+    <div class="gp-card-note">Oversized truck ride through Kong territory. Bumpy road vehicle, some jump scares from animatronics and screens. Mild intensity overall — the scariest part is the queue walk-through, not the ride itself. Good option while the group is on VelociCoaster.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — MILD INTENSITY, GREAT THEMING</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🦕 Raptor Encounter — Hidden Gem</div>
+    <div class="gp-card-note">A life-size trained Velociraptor from Jurassic World meets guests in a fenced enclosure. Interactive, genuinely surprising, and completely free with park admission. The raptor handler does a full performance. Most people don't even know it exists. Check the Universal app for encounter times.</div>
+    <span class="gp-badge gp-gem">💎 HIDDEN GEM · FREE WITH ADMISSION</span>
+  </div>
+
+  <div class="gp-area-band"><h3>🚂 Hogwarts Express + Diagon Alley</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Hogwarts Express</div>
+    <div class="gp-card-note">Sit-down train with a full theatrical experience in the compartment — different story each direction. Completely gentle, no movement except the train. One of the best experiences in either park. Do it both ways if you can.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — RIDE IT BOTH DIRECTIONS</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Escape from Gringotts</div>
+    <div class="gp-card-note">Gentle dark ride on a mine cart with mild screen moments and light drops. Much less intense than it looks. One of the most immersive dark rides in either park. Dragon on the roof breathes real fire — worth standing outside and waiting for it.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — MILDER THAN IT LOOKS</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍺 The Hopping Pot — Outdoor Bar</div>
+    <div class="gp-card-note">Outdoor bar in Carkitt Market with eight themed brews on draft — each with its own custom tap handle. Wizard's Brew is a heavy dark porter. Dragon Scale is a hoppy amber lager. Fire Whisky also available. Picnic tables right next to the Carkitt Market stage where the live shows perform. Best of both worlds — drink and watch the show at the same time.</div>
+    <span class="gp-badge gp-bar">🍸 8 BREWS ON DRAFT · NEXT TO THE STAGE</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎭 Celestina Warbeck and the Banshees</div>
+    <div class="gp-card-note">Live jazz, swing, and big band show on the Carkitt Market stage — songs written by J.K. Rowling including "A Cauldron Full of Hot, Strong Love" and "You Charmed the Heart Right Out of Me." 15 minutes, runs roughly once per hour throughout the day. Audience participation included. Alternates with Tales of Beedle the Bard on the same stage. Grab a drink from the Hopping Pot and find a seat before the show starts.</div>
+    <span class="gp-badge gp-show">🎭 MUST-SEE · RUNS HOURLY · GRAB A DRINK FIRST</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🎭 Tales of Beedle the Bard</div>
+    <div class="gp-card-note">Puppetry show bringing the Deathly Hallows fairy tale to life on the same Carkitt Market stage. Alternates with Celestina. Surprisingly moving for a theme park show — multiple guests report it's the most unexpectedly emotional experience of their Universal trip.</div>
+    <span class="gp-badge gp-show">🎭 WORTH SEEING · SAME STAGE AS CELESTINA</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍦 Florean Fortescue's Ice-Cream Parlour — Hidden Gem</div>
+    <div class="gp-card-note">Unique flavors you won't find anywhere else: Butterbeer ice cream, Earl Grey and Lavender, Chocolate Chili, Clotted Cream, Sticky Toffee. Sit outside in Diagon Alley and watch the crowds flow by. One of the most photographed spots in the whole resort.</div>
+    <span class="gp-badge gp-gem">💎 UNIQUE FLAVORS · GREAT PEOPLE-WATCHING SPOT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🕯️ Knockturn Alley + Borgin and Burkes</div>
+    <div class="gp-card-note">Dark alleyway off Diagon Alley — most guests miss it entirely. Borgin and Burkes sells dark arts merchandise. The transition from bright Diagon Alley into the shadowy Knockturn Alley is one of the most effective environmental transitions in any theme park. Step inside slowly and look at every detail.</div>
+    <span class="gp-badge gp-gem">💎 MOST MISSED HIDDEN GEM IN DIAGON ALLEY</span>
+  </div>
+
+  <div class="gp-area-band"><h3>🎬 Universal Studios — Afternoon</h3></div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Revenge of the Mummy</div>
+    <div class="gp-card-note">Launched indoor coaster in total darkness. Two launches, hits 45mph, has a backwards section. This is a real coaster — not gentle. Intense for non-coaster riders but shorter than most (under 3 minutes). Try it if you're feeling bold.</div>
+    <span class="gp-badge gp-risk">⚠️ TRY AT YOUR OWN RISK — REAL COASTER</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Transformers: The Ride 3D</div>
+    <div class="gp-card-note">Screen-based dark ride — very similar feel to Spider-Man. Smooth motion, no real drops. Slightly more intense screens but nothing physically rough. Easy ride for most people.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Men in Black: Alien Attack</div>
+    <div class="gp-card-note">Gentle spinning car with an alien shooting game. You control how much your car spins by hitting a target. Keep it steady and it's completely smooth. Fun competitive ride for the group.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT — YOU CONTROL THE SPIN</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Despicable Me Minion Mayhem</div>
+    <div class="gp-card-note">Standing motion simulator — you're turned into a Minion. Mild movement, fun for all ages. Good afternoon ride when you want something light.</div>
+    <span class="gp-badge gp-go">✅ GO FOR IT</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">Horror Make Up Show</div>
+    <div class="gp-card-note">25-minute comedic show explaining how Hollywood creates monster makeup effects. Sit-down, air-conditioned, genuinely funny. Perfect afternoon break. If you loved the Darkmoor Monster Makeup at Epic yesterday, this is the behind-the-scenes version.</div>
+    <span class="gp-badge gp-show">🎭 GREAT AFTERNOON BREAK · AIR CONDITIONED</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">🍺 Moe's Tavern — Springfield</div>
+    <div class="gp-card-note">The actual Moe's Tavern from The Simpsons. Duff Beer on tap, Flaming Moe cocktail (served with theatrical smoke). Sit at the bar and take in one of the most detailed themed bar environments in any theme park. The Simpsons ride theming outside is worth a slow walk-through even if you don't ride.</div>
+    <span class="gp-badge gp-bar">🍸 DUFF BEER · FLAMING MOE · ICONIC BAR</span>
+  </div>
+
+  <div class="gp-card">
+    <div class="gp-card-title">💦 Dudley Do-Right's Ripsaw Falls — Late Day Optional</div>
+    <div class="gp-card-note">75-foot drop flume ride. This is a legitimate thrill ride — not a kiddie flume. You WILL get soaked. Genuinely exciting but plan for wet shoes for the rest of the day. Best saved for the final hour when you don't care about being wet and the Florida heat has peaked.</div>
+    <span class="gp-badge gp-risk">⚠️ TRY AT YOUR OWN RISK — MAJOR DROP · WILL SOAK YOU</span>
+  </div>
+
+  <div class="gp-divider"><h3>📋 Grandparent Tips — Saturday</h3></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>No Express today actually works in your favor.</strong> While the group queues for Hagrid's and VelociCoaster at rope drop, the gentle rides have almost no wait. Spider-Man, Skull Island, and Forbidden Journey (if you try it) will be walk-ons early.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Hog's Head Pub first thing in Hogsmeade.</strong> Ask for the secret off-menu cocktails — they're not listed anywhere but the bartenders know them. Tip the barkeep and watch the hog come alive behind the bar.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Hogwarts Castle queue is worth it even if you skip the ride.</strong> The walk-through of the castle interior — moving portraits, talking sorting hat, Defence Against the Dark Arts classroom — is extraordinary. You can ask to use the castle queue as a walk-through without riding.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Carkitt Market is your afternoon home base.</strong> Grab a Hopping Pot drink, find a seat, and watch Celestina Warbeck and the Banshees perform. Shows run roughly once per hour. Check the Universal app for exact times.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Knockturn Alley is the most missed gem in Diagon Alley.</strong> Most guests walk straight past the entrance. It's darker, quieter, and more detailed than the main alley. Take your time in there.</div></div>
+  <div class="gp-tip"><div class="gp-tip-bullet">→</div><div class="gp-tip-text"><strong>Raptor Encounter is completely free and most guests miss it.</strong> Check the Universal app for encounter times and catch it while the group is on VelociCoaster. It's in the Jurassic Park area.</div></div>
+</div>
+
 </body>
 </html>
